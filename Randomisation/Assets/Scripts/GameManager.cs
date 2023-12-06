@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+
+    [SerializeField] public HorizontalLayoutGroup _btnsKeys;
+    [SerializeField] public Button btnKey;
 
     [SerializeField] List<Chest> _chests;
     [SerializeField] GameObject _container;
@@ -95,8 +99,8 @@ public class GameManager : MonoBehaviour
                 chest.Keys.Add(_chests[i + 1].Color);
             }
             
-            // 10% de chance d'une 2eme clé
-            if (Random.value >= 0.9)
+            // % de chance d'une 2eme clé
+            if (Random.value >= 0.5)
             {
                 var futureChests = _chests.Skip(i).ToList();
                 chest.Keys.Add(futureChests[Random.Range(0, futureChests.Count)].Color);

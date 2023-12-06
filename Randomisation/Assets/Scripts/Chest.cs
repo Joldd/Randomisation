@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Chest : MonoBehaviour
 {
@@ -39,15 +41,40 @@ public class Chest : MonoBehaviour
         if (IsLast)
         {
             GameObject myTreasure = Instantiate(treasure, transform);
-            myTreasure.transform.position = transform.position;
+            myTreasure.transform.position = new Vector3(transform.position.x - 0.23f, transform.position.y + 1.04f, transform.position.z); ;
         }
         else
         {
-            GameManager.Instance.Key = Keys[0];
-            
-            GameObject myKey = Instantiate(key, transform);
-            myKey.transform.position = transform.position;
-            myKey.GetComponent<SpriteRenderer>().color = Keys[0];
+            if (Keys.Count >= 2)
+            {
+                GameManager.Instance.Key = new Color(0,0,0,0);
+                List<Button> l_buttons = new List<Button>();
+                float i = 0.2f;
+                foreach (var keyClr in Keys)
+                {
+                    Button btn = Instantiate(GameManager.Instance.btnKey, GameManager.Instance._btnsKeys.transform);
+                    l_buttons.Add(btn);
+                    btn.GetComponent<Image>().color = keyClr;
+                    btn.onClick.AddListener(() => {
+                        GameManager.Instance.Key = keyClr;
+                        foreach (var btn in l_buttons)
+                        {
+                            Destroy(btn.gameObject);
+                        }
+                    });
+                    GameObject keyObj = Instantiate(key, transform);
+                    keyObj.transform.position = new Vector3(transform.position.x + i, transform.position.y + 0.8f, transform.position.z);
+                    keyObj.GetComponent<SpriteRenderer>().color = keyClr;
+                    i = -i;
+                }
+            }
+            else
+            {
+                GameManager.Instance.Key = Keys[0];
+                GameObject myKey = Instantiate(key, transform);
+                myKey.transform.position = new Vector3(transform.position.x, transform.position.y + 0.8f, transform.position.z); ;
+                myKey.GetComponent<SpriteRenderer>().color = Keys[0];
+            }
         }
         
         locked.SetActive(false);
