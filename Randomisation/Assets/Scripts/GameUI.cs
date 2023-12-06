@@ -6,24 +6,28 @@ using TMPro;
 public class GameUI : MonoBehaviour
 {
     [SerializeField] GameManager _gameManager;
-    [SerializeField] TextMeshProUGUI _titleText;
+    [SerializeField] CanvasGroup _mainMenuGroup;
     [SerializeField] Button _playButton;
-    [SerializeField] CanvasGroup _playButtonGroup;
+    [SerializeField] GameObject _seedButton;
+    [SerializeField] TextMeshProUGUI _seedText;
+    [SerializeField] TMP_InputField _seedInput;
     [SerializeField] GameObject _stopButton;
     
     public void Play()
     {
         _playButton.interactable = false;
-        
-        DOTween.Sequence()
-            .Append(_titleText.DOFade(0f, 1.5f))
-            .Insert(0, _playButtonGroup.DOFade(0f, 1.5f))
+
+        _mainMenuGroup.DOFade(0f, 1.5f)
             .OnComplete(() =>
             {
-                _gameManager.Play();
+                var hasValue = int.TryParse(_seedInput.text, out var seed);
+                var finalSeed = _gameManager.Play(hasValue ? seed : -1);
+                _seedText.text = $"Seed : {finalSeed}";
                 _gameManager.ShowChests();
+                _seedButton.SetActive(true);
                 _stopButton.SetActive(true);
-            });
+            }
+        );
     }
 
     public void Stop()
@@ -31,8 +35,13 @@ public class GameUI : MonoBehaviour
         _playButton.interactable = true;
         
         _gameManager.HideChests();
+        _seedButton.SetActive(false);
         _stopButton.SetActive(false);
-        _titleText.DOFade(1f, 0.1f);
-        _playButtonGroup.DOFade(1f, 0.1f);
+        _mainMenuGroup.DOFade(1f, 0.1f);
+    }
+
+    public void CopySeed()
+    {
+        GUIUtility.systemCopyBuffer = _seedText.text[7..];
     }
 }

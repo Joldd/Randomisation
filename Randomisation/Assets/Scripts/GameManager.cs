@@ -5,7 +5,6 @@ using Utils.ExtensionMethods;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] int _seed = -1;
     [SerializeField] List<Chest> _chests;
     [SerializeField] GameObject _container;
 
@@ -19,11 +18,11 @@ public class GameManager : MonoBehaviour
         _container.SetActive(false);
     }
     
-    public void Play()
+    public int Play(int seed)
     {
-        var seed = Init(_seed);
+        var finalSeed = Init(seed);
 
-        Debug.Log(seed);
+        Debug.Log(finalSeed);
         
         var chestIds = Enumerable.Range(0, 10).OrderBy(_ => Random.value).ToList();
 
@@ -39,6 +38,8 @@ public class GameManager : MonoBehaviour
 
             chest.ChestToOpen = prevChest;
         }
+
+        return finalSeed;
     }
 
     int Init(int seed = -1)
