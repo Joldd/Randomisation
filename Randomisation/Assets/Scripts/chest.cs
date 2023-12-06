@@ -5,10 +5,16 @@ using UnityEngine;
 public class chest : MonoBehaviour
 {
     [SerializeField]
-    Animator animator;
+    private Animator _animator;
+    public int chestToOpen = 0;
+
+    private void Start()
+    {
+
+    }
 
     private void OnMouseDown()
     {
-        animator.Play("open");
+        _animator.Play("open");
     }
 }
