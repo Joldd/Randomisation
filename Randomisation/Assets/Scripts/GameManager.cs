@@ -2,7 +2,6 @@
 using System.Linq;
 using UnityEngine;
 using Utils.ExtensionMethods;
-using static log4net.Appender.ColoredConsoleAppender;
 
 public class GameManager : MonoBehaviour
 {
