@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     
     public int Play(int seed)
     {
+        ResetAllChests();
+        
         var finalSeed = Init(seed);
 
         Debug.Log(finalSeed);
@@ -35,18 +37,18 @@ public class GameManager : MonoBehaviour
             Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1);
 
             if (i == chestIds.Count - 1)
-                chest.isLast = true;
+                chest.IsLast = true;
             else
-                chest.isLast = false;
+                chest.IsLast = false;
 
             if (i >= 1)
             {
                 prevChest = _chests.Single(chest => chest.Id == chestIds[i - 1]);
-                prevChest.colorToOpen = color;
+                prevChest.ColorToOpen = color;
             }
                 
             chest.ChestToOpen = prevChest;
-            chest.locked.GetComponent<SpriteRenderer>().color = color;
+            chest.SetColor(color);
         }
 
         return finalSeed;
@@ -60,5 +62,13 @@ public class GameManager : MonoBehaviour
         
         Random.InitState(seed);
         return seed;
+    }
+
+    void ResetAllChests()
+    {
+        foreach (var chest in _chests)
+        {
+            chest.Clear();
+        }
     }
 }

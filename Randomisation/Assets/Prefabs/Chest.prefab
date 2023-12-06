@@ -238,8 +238,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 8339435223049709935}
+  _spriteRenderer: {fileID: 8918795912901573137}
+  _closeSprite: {fileID: -1293186384, guid: aeef1e22ab63c524ea9f805c863c2dcd, type: 3}
   key: {fileID: 8678050493316073058, guid: d254108168e18784f969c7732b261769, type: 3}
   locked: {fileID: 512940704163788360}
+  lockedSpriteRenderer: {fileID: 3776909793818067073}
   treasure: {fileID: 451223322698365621, guid: c5eb246943908da4aa7731020550bf88, type: 3}
   <Id>k__BackingField: 0
 --- !u!61 &1469137684932491220

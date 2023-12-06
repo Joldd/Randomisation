@@ -1,47 +1,60 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class Chest : MonoBehaviour
 {
     [SerializeField] Animator _animator;
-    [SerializeField] public GameObject key;
-    [SerializeField] public GameObject locked;
-    [SerializeField] public GameObject treasure;
+    [SerializeField] SpriteRenderer _spriteRenderer;
+    [SerializeField] Sprite _closeSprite;
+    [SerializeField] GameObject key;
+    [SerializeField] GameObject locked;
+    [SerializeField] SpriteRenderer lockedSpriteRenderer;
+    [SerializeField] GameObject treasure;
 
     [field: SerializeField] public int Id { get; private set; }
     
     public Chest ChestToOpen { get; set; }
-    public Color colorToOpen { get; set; }
+    public Color ColorToOpen { get; set; }
+    public bool IsLast { get; set; }
     public bool IsOpened { get; private set; }
 
-    public bool isLast { get; set; }
-
-    private void Start()
-    {
-
-    }
-
-    private void OnMouseDown()
+    void OnMouseDown()
     {
         if (ChestToOpen != null && !ChestToOpen.IsOpened)
             return;
         
         IsOpened = true;
         _animator.Play("open");
-        if (isLast)
+        if (IsLast)
         {
-            GameObject myTreasure = Instantiate<GameObject>(treasure);
+            GameObject myTreasure = Instantiate(treasure, transform);
             myTreasure.transform.position = transform.position;
         }
         else
         {
-            GameObject myKey = Instantiate<GameObject>(key);
+            GameObject myKey = Instantiate(key, transform);
             myKey.transform.position = transform.position;
-            myKey.GetComponent<SpriteRenderer>().color = colorToOpen;
+            myKey.GetComponent<SpriteRenderer>().color = ColorToOpen;
         }
         locked.SetActive(false);
+    }
+
+    public void SetColor(Color color)
+    {
+        lockedSpriteRenderer.color = color;
+    }
+
+    public void Clear()
+    {
+        for (int i = 2; i < transform.childCount; i++)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+
+        IsLast = false;
+        IsOpened = false;
+        ChestToOpen = null;
+        ColorToOpen = Color.clear;
+        _spriteRenderer.sprite = _closeSprite;
+        locked.SetActive(true);
     }
 }
