@@ -116,6 +116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8148175959906091189}
   - component: {fileID: 4982176362654290453}
+  - component: {fileID: 1469137684932491220}
   - component: {fileID: 7565588620375322899}
   m_Layer: 0
   m_Name: Chest
@@ -154,6 +155,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 8339435223049709935}
   chestToOpen: 0
+  key: {fileID: 8678050493316073058, guid: d254108168e18784f969c7732b261769, type: 3}
+--- !u!61 &1469137684932491220
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7404797923235648369}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.03812015, y: 0.057180285}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2.3723276, y: 2.2198465}
+  m_EdgeRadius: 0
 --- !u!61 &7565588620375322899
 BoxCollider2D:
   m_ObjectHideFlags: 0
