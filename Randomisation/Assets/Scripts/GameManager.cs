@@ -2,11 +2,13 @@
 using System.Linq;
 using UnityEngine;
 using Utils.ExtensionMethods;
+using static log4net.Appender.ColoredConsoleAppender;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] List<Chest> _chests;
     [SerializeField] GameObject _container;
+    List<Color> _colors;
 
     public void ShowChests()
     {
@@ -21,7 +23,28 @@ public class GameManager : MonoBehaviour
     public int Play(int seed)
     {
         ResetAllChests();
-        
+
+        _colors = new List<Color>() {
+            new Color(230f/255f, 25f/255f, 75f/255f, 1),
+            new Color(60f/255f, 180f/255f, 75f/255f, 1),
+            new Color(255f/255f, 225f/255f, 25f/255f, 1),
+            new Color(0f/255f, 130f/255f, 200f/255f, 1),
+            new Color(245f/255f, 130f/255f, 48f/255f, 1),
+            new Color(70f/255f, 240f/255f, 240f/255f, 1),
+            new Color(240f/255f, 50f/255f, 230f/255f, 1),
+            new Color(250f/255f, 190f/255f, 212f/255f, 1),
+            new Color(0f/255f, 128f/255f, 128f/255f, 1),
+            new Color(220f/255f, 190f/255f, 255f/255f, 1),
+            new Color(170f/255f, 110f/255f, 40f/255f, 1),
+            new Color(255f/255f, 250f/255f, 200f/255f, 1),
+            new Color(128f/255f, 0f/255f, 0f/255f, 1),
+            new Color(170f/255f, 255f/255f, 195f/255f, 1),
+            new Color(0f/255f, 0f/255f, 128f/255f, 1),
+            new Color(128f/255f, 128f/255f, 128f/255f, 1),
+            new Color(255f/255f, 255f/255f, 255f/255f, 1),
+            new Color(0f/255f, 0f/255f, 0f/255f, 1)
+        };
+
         var finalSeed = Init(seed);
 
         Debug.Log(finalSeed);
@@ -34,7 +57,9 @@ public class GameManager : MonoBehaviour
         {
             var chest = _chests.Single(chest => chest.Id == chestIds[i]);
             Chest prevChest = null;
-            Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1);
+            int randomIndex = Random.Range(0, _colors.Count - 1);
+            Color color = _colors[randomIndex];
+            _colors.RemoveAt(randomIndex);
 
             if (i == chestIds.Count - 1)
                 chest.IsLast = true;
@@ -50,7 +75,7 @@ public class GameManager : MonoBehaviour
             chest.ChestToOpen = prevChest;
             chest.SetColor(color);
         }
-
+        
         return finalSeed;
     }
 
