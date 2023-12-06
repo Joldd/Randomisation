@@ -33,11 +33,16 @@ public class GameManager : MonoBehaviour
         {
             var chest = _chests.Single(chest => chest.Id == chestIds[i]);
             Chest prevChest = null;
-            
-            if (i >= 1)
-                prevChest = _chests.Single(chest => chest.Id == chestIds[i - 1]);
+            Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1);
 
+            if (i >= 1)
+            {
+                prevChest = _chests.Single(chest => chest.Id == chestIds[i - 1]);
+                prevChest.colorToOpen = color;
+            }
+                
             chest.ChestToOpen = prevChest;
+            chest.locked.GetComponent<SpriteRenderer>().color = color;
         }
     }
 

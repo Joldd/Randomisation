@@ -1,16 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Chest : MonoBehaviour
 {
     [SerializeField] Animator _animator;
-    [SerializeField]
-    private GameObject key;
+    [SerializeField] public GameObject key;
+    [SerializeField] public GameObject locked;
+    [SerializeField] public GameObject treasure;
 
     [field: SerializeField] public int Id { get; private set; }
     
     public Chest ChestToOpen { get; set; }
+    public Color colorToOpen { get; set; }
     public bool IsOpened { get; private set; }
     
     private void Start()
@@ -27,5 +31,12 @@ public class Chest : MonoBehaviour
         _animator.Play("open");
         GameObject myKey = Instantiate<GameObject>(key);
         myKey.transform.position = transform.position;
+        myKey.GetComponent<SpriteRenderer>().color = colorToOpen;
+        //if (ChestToOpen.IsOpened)
+        //{
+        //    GameObject myTreasure = Instantiate<GameObject>(treasure);
+        //    myTreasure.transform.position = transform.position;
+        //}
+        locked.SetActive(false);
     }
 }
