@@ -7,8 +7,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] int _seed = -1;
     [SerializeField] List<Chest> _chests;
+    [SerializeField] GameObject _container;
 
-    [ContextMenu("Play")]
     public void Play()
     {
         var seed = Init(_seed);
@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
 
             chest.ChestToOpen = prevChest;
         }
+        
+        _container.SetActive(true);
     }
 
     int Init(int seed = -1)
