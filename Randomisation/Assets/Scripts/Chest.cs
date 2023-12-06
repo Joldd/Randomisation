@@ -1,5 +1,5 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Chest : MonoBehaviour
 {
@@ -10,22 +10,32 @@ public class Chest : MonoBehaviour
     [SerializeField] GameObject locked;
     [SerializeField] SpriteRenderer lockedSpriteRenderer;
     [SerializeField] GameObject treasure;
+    Color _color;
 
     [field: SerializeField] public int Id { get; private set; }
-    
-    public Chest ChestToOpen { get; set; }
-    public Color ColorToOpen { get; set; }
+
+    public Color Color
+    {
+        get => _color;
+        set
+        {
+            _color = value;
+            lockedSpriteRenderer.color = _color;
+        }
+    }
+
+    public List<Color> Keys { get; set; } = new List<Color>();
     public bool IsLast { get; set; }
     public bool IsOpened { get; private set; }
 
     void OnMouseDown()
     {
-        if (ChestToOpen != null && !ChestToOpen.IsOpened)
+        if (GameManager.Instance.Key != Color)
             return;
         
         IsOpened = true;
         _animator.Play("open");
-        GameManager.Instance.currentKey.color = ColorToOpen;
+        
         if (IsLast)
         {
             GameObject myTreasure = Instantiate(treasure, transform);
@@ -33,17 +43,14 @@ public class Chest : MonoBehaviour
         }
         else
         {
+            GameManager.Instance.Key = Keys[0];
+            
             GameObject myKey = Instantiate(key, transform);
             myKey.transform.position = transform.position;
-            myKey.GetComponent<SpriteRenderer>().color = ColorToOpen;
+            myKey.GetComponent<SpriteRenderer>().color = Keys[0];
         }
+        
         locked.SetActive(false);
-
-    }
-
-    public void SetColor(Color color)
-    {
-        lockedSpriteRenderer.color = color;
     }
 
     public void Clear()
@@ -55,8 +62,8 @@ public class Chest : MonoBehaviour
 
         IsLast = false;
         IsOpened = false;
-        ChestToOpen = null;
-        ColorToOpen = Color.clear;
+        Color = Color.clear;
+        Keys.Clear();
         _spriteRenderer.sprite = _closeSprite;
         locked.SetActive(true);
     }

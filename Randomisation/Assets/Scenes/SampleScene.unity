@@ -1886,7 +1886,6 @@ MonoBehaviour:
   - {fileID: 1432507628}
   - {fileID: 1050821968}
   _container: {fileID: 50711477}
-  currentKey: {fileID: 1310502005}
 --- !u!4 &1209339060
 Transform:
   m_ObjectHideFlags: 0
@@ -2457,7 +2456,8 @@ MonoBehaviour:
   _seedText: {fileID: 771782459}
   _seedInput: {fileID: 543821952}
   _stopButton: {fileID: 1332769929}
-  _currentKey: {fileID: 1310502004}
+  _currentKeyGO: {fileID: 1310502004}
+  _currentKey: {fileID: 1310502005}
 --- !u!1001 &1560761758
 PrefabInstance:
   m_ObjectHideFlags: 0

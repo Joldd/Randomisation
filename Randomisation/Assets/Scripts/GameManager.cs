@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using Utils.ExtensionMethods;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,7 +12,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _container;
     List<Color> _colors;
 
-    [SerializeField] public Image currentKey;
+    Color _key;
+    
+    public Color Key
+    {
+        get => _key;
+        set
+        {
+            _key = value;
+            KeyChanged?.Invoke(_key);
+        } 
+    }
+    
+    public Action<Color> KeyChanged { get; set; }
 
     private void Awake()
     {
@@ -63,40 +75,37 @@ public class GameManager : MonoBehaviour
 
         var finalSeed = Init(seed);
 
-        Debug.Log(finalSeed);
-        
-        var chestIds = Enumerable.Range(0, 10).OrderBy(_ => Random.value).ToList();
+        _chests = _chests.OrderBy(_ => Random.value).ToList();
 
-        Debug.Log(chestIds.ToDisplayString());
-
-        for (var i = chestIds.Count - 1; i >= 0; i--)
+        foreach (var chest in _chests)
         {
-            var chest = _chests.Single(chest => chest.Id == chestIds[i]);
-            Chest prevChest = null;
             int randomIndex = Random.Range(0, _colors.Count - 1);
             Color color = _colors[randomIndex];
             _colors.RemoveAt(randomIndex);
-
-            if (i == chestIds.Count - 1)
-                chest.IsLast = true;
-            else
-                chest.IsLast = false;
-
-            if (i >= 1)
-            {
-                prevChest = _chests.Single(chest => chest.Id == chestIds[i - 1]);
-                prevChest.ColorToOpen = color;
-            }
-                
-            chest.ChestToOpen = prevChest;
-            chest.SetColor(color);
-
-            if (i == 0)
-            {
-                currentKey.color = color;
-            }
+            chest.Color = color;
         }
         
+        for (var i = 0; i < _chests.Count; i++)
+        {
+            var chest = _chests.Single(chest => chest == _chests[i]);
+            
+            // Première clé
+            if (i != _chests.Count - 1)
+            {
+                chest.Keys.Add(_chests[i + 1].Color);
+            }
+            
+            // 10% de chance d'une 2eme clé
+            if (Random.value >= 0.9)
+            {
+                var futureChests = _chests.Skip(i).ToList();
+                chest.Keys.Add(futureChests[Random.Range(0, futureChests.Count)].Color);
+            }
+        }
+
+        _chests.Last().IsLast = true;
+        Key = _chests.First().Color;
+
         return finalSeed;
     }
 
@@ -104,7 +113,7 @@ public class GameManager : MonoBehaviour
     {
         // Generates a random seed if not given
         if (seed == -1)
-            seed = System.Environment.TickCount;
+            seed = Environment.TickCount;
         
         Random.InitState(seed);
         return seed;

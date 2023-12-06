@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
@@ -12,8 +13,24 @@ public class GameUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI _seedText;
     [SerializeField] TMP_InputField _seedInput;
     [SerializeField] GameObject _stopButton;
-    [SerializeField] GameObject _currentKey;
+    [SerializeField] GameObject _currentKeyGO;
+    [SerializeField] Image _currentKey;
 
+    void OnEnable()
+    {
+        _gameManager.KeyChanged += OnKeyChanged;
+    }
+
+    void OnDisable()
+    {
+        _gameManager.KeyChanged -= OnKeyChanged;
+    }
+
+    void OnKeyChanged(Color newColor)
+    {
+        _currentKey.color = newColor;
+    }
+    
     public void Play()
     {
         _playButton.interactable = false;
@@ -27,7 +44,7 @@ public class GameUI : MonoBehaviour
                 _gameManager.ShowChests();
                 _seedButton.SetActive(true);
                 _stopButton.SetActive(true);
-                _currentKey.SetActive(true);
+                _currentKeyGO.SetActive(true);
             }
         );
     }
@@ -39,7 +56,7 @@ public class GameUI : MonoBehaviour
         _gameManager.HideChests();
         _seedButton.SetActive(false);
         _stopButton.SetActive(false);
-        _currentKey.SetActive(false);
+        _currentKeyGO.SetActive(false);
         _mainMenuGroup.DOFade(1f, 0.1f);
     }
 
