@@ -9,6 +9,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] List<Chest> _chests;
     [SerializeField] GameObject _container;
 
+    public void ShowChests()
+    {
+        _container.SetActive(true);
+    }
+    
+    public void HideChests()
+    {
+        _container.SetActive(false);
+    }
+    
     public void Play()
     {
         var seed = Init(_seed);
@@ -29,8 +39,6 @@ public class GameManager : MonoBehaviour
 
             chest.ChestToOpen = prevChest;
         }
-        
-        _container.SetActive(true);
     }
 
     int Init(int seed = -1)
