@@ -35,6 +35,11 @@ public class GameManager : MonoBehaviour
             Chest prevChest = null;
             Color color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f), 1);
 
+            if (i == chestIds.Count - 1)
+                chest.isLast = true;
+            else
+                chest.isLast = false;
+
             if (i >= 1)
             {
                 prevChest = _chests.Single(chest => chest.Id == chestIds[i - 1]);

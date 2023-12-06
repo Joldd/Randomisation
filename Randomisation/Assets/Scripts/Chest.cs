@@ -16,7 +16,9 @@ public class Chest : MonoBehaviour
     public Chest ChestToOpen { get; set; }
     public Color colorToOpen { get; set; }
     public bool IsOpened { get; private set; }
-    
+
+    public bool isLast { get; set; }
+
     private void Start()
     {
 
@@ -29,14 +31,17 @@ public class Chest : MonoBehaviour
         
         IsOpened = true;
         _animator.Play("open");
-        GameObject myKey = Instantiate<GameObject>(key);
-        myKey.transform.position = transform.position;
-        myKey.GetComponent<SpriteRenderer>().color = colorToOpen;
-        //if (ChestToOpen.IsOpened)
-        //{
-        //    GameObject myTreasure = Instantiate<GameObject>(treasure);
-        //    myTreasure.transform.position = transform.position;
-        //}
+        if (isLast)
+        {
+            GameObject myTreasure = Instantiate<GameObject>(treasure);
+            myTreasure.transform.position = transform.position;
+        }
+        else
+        {
+            GameObject myKey = Instantiate<GameObject>(key);
+            myKey.transform.position = transform.position;
+            myKey.GetComponent<SpriteRenderer>().color = colorToOpen;
+        }
         locked.SetActive(false);
     }
 }
