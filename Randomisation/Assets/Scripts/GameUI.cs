@@ -12,7 +12,8 @@ public class GameUI : MonoBehaviour
     [SerializeField] TextMeshProUGUI _seedText;
     [SerializeField] TMP_InputField _seedInput;
     [SerializeField] GameObject _stopButton;
-    
+    [SerializeField] GameObject _currentKey;
+
     public void Play()
     {
         _playButton.interactable = false;
@@ -26,6 +27,7 @@ public class GameUI : MonoBehaviour
                 _gameManager.ShowChests();
                 _seedButton.SetActive(true);
                 _stopButton.SetActive(true);
+                _currentKey.SetActive(true);
             }
         );
     }
@@ -37,6 +39,7 @@ public class GameUI : MonoBehaviour
         _gameManager.HideChests();
         _seedButton.SetActive(false);
         _stopButton.SetActive(false);
+        _currentKey.SetActive(false);
         _mainMenuGroup.DOFade(1f, 0.1f);
     }
 

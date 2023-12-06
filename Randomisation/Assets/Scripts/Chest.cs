@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Chest : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class Chest : MonoBehaviour
         
         IsOpened = true;
         _animator.Play("open");
+        GameManager.Instance.currentKey.color = ColorToOpen;
         if (IsLast)
         {
             GameObject myTreasure = Instantiate(treasure, transform);
@@ -36,6 +38,7 @@ public class Chest : MonoBehaviour
             myKey.GetComponent<SpriteRenderer>().color = ColorToOpen;
         }
         locked.SetActive(false);
+
     }
 
     public void SetColor(Color color)

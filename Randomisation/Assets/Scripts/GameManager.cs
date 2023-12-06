@@ -1,13 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using Utils.ExtensionMethods;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
     [SerializeField] List<Chest> _chests;
     [SerializeField] GameObject _container;
     List<Color> _colors;
+
+    [SerializeField] public Image currentKey;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     public void ShowChests()
     {
@@ -73,6 +90,11 @@ public class GameManager : MonoBehaviour
                 
             chest.ChestToOpen = prevChest;
             chest.SetColor(color);
+
+            if (i == 0)
+            {
+                currentKey.color = color;
+            }
         }
         
         return finalSeed;
