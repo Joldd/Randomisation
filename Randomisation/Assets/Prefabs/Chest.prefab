@@ -158,6 +158,7 @@ MonoBehaviour:
   _key: {fileID: 4802085995349421215, guid: d254108168e18784f969c7732b261769, type: 3}
   _sr: {fileID: 8918795912901573137}
   treasure: {fileID: 451223322698365621, guid: c5eb246943908da4aa7731020550bf88, type: 3}
+  smoke: {fileID: 7868319256561682262, guid: 0d259d6dd963a34429c649c2eb0e3fe1, type: 3}
   test: 0
   <Id>k__BackingField: 0
 --- !u!61 &1469137684932491220

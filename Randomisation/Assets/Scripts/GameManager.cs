@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
         new Color(255f/255f, 255f/255f, 255f/255f, 1),
         new Color(0f/255f, 0f/255f, 0f/255f, 1),
     };
-    
+
     public static GameManager Instance { get; private set; }
 
     [SerializeField] public HorizontalLayoutGroup _currentKeys;

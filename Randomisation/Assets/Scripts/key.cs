@@ -19,6 +19,7 @@ public class key : MonoBehaviour
         chest.Keys.Remove(this);
         Destroy(gameObject);
         chest.test = false;
+        chest.IsOpened = false;
         foreach (var k in chest.Keys)
         {
             k.gameObject.SetActive(false);

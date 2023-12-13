@@ -11,6 +11,7 @@ public class Chest : MonoBehaviour
     [SerializeField] key _key;
     [SerializeField] SpriteRenderer _sr;
     [SerializeField] GameObject treasure;
+    [SerializeField] GameObject smoke;
     Color _color;
     public bool test = false;
 
@@ -29,7 +30,7 @@ public class Chest : MonoBehaviour
     public List<Color> KeysColors { get; set; } = new List<Color>();
     public List<key> Keys { get; set; } = new List<key>();
     public bool IsLast { get; set; }
-    public bool IsOpened { get; private set; }
+    public bool IsOpened { get; set; }
     public bool OnRequiredPath { get; set; }
 
     private void Start()
@@ -56,19 +57,36 @@ public class Chest : MonoBehaviour
                 break;
             }
         }
-        if (!test || Keys.Count == 0 && !IsLast)
+        if (!test)
             return;
-        
-        _animator.Play("open");
-        
+
         if (IsLast)
         {
             GameObject myTreasure = Instantiate(treasure, transform);
-            myTreasure.transform.position = new Vector3(transform.position.x - 0.23f, transform.position.y + 1.04f, transform.position.z); ;
+            myTreasure.transform.position = new Vector3(transform.position.x - 0.23f, transform.position.y + 1.04f, transform.position.z);
+            _animator.Play("open");
+            IsOpened = true;
+        }
+        else if (Keys.Count == 0)
+        {
+            if (IsOpened)
+            {
+                _animator.Play("close");
+                IsOpened = false;
+            }
+            else
+            {
+                GameObject mySmoke = Instantiate(smoke, transform);
+                mySmoke.transform.position = new Vector3(transform.position.x - 0.23f, transform.position.y + 0.3f, transform.position.z);
+                _animator.Play("open");
+                IsOpened = true;
+            }   
         }
         else
         {
-           GameManager.Instance.changeColor(Color, new Color(0, 0, 0, 0));
+            _animator.Play("open");
+            IsOpened = true;
+            GameManager.Instance.changeColor(Color, new Color(0, 0, 0, 0));
             foreach (var key in Keys)
             {
                 key.gameObject.SetActive(true);
