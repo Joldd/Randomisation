@@ -31,6 +31,7 @@ public class Chest : MonoBehaviour
     public List<Color> Keys { get; set; } = new List<Color>();
     public bool IsLast { get; set; }
     public bool IsOpened { get; private set; }
+    public bool OnRequiredPath { get; set; }
 
     void OnMouseDown()
     {
@@ -99,6 +100,7 @@ public class Chest : MonoBehaviour
 
         IsLast = false;
         IsOpened = false;
+        OnRequiredPath = false;
         Color = Color.clear;
         Keys.Clear();
         _spriteRenderer.sprite = _closeSprite;

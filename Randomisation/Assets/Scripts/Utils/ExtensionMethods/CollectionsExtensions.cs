@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Utils.ExtensionMethods
 {
@@ -19,5 +20,12 @@ namespace Utils.ExtensionMethods
             return $"{s}]";
         }
 
+        public static T GetRandom<T>(this List<T> source)
+        {
+            if (source.Count == 0)
+                return default;
+            
+            return source[Random.Range(0, source.Count)];
+        }
     }
 }
