@@ -35,9 +35,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image keyImage;
     public List<Image> _currentKeysImages  = new List<Image>();
 
-    [SerializeField] public HorizontalLayoutGroup _btnsKeys;
-    [SerializeField] public Button btnKey;
-
     [SerializeField] List<Chest> _chests;
     [SerializeField] GameObject _container;
 
@@ -55,10 +52,9 @@ public class GameManager : MonoBehaviour
     //        KeyChanged?.Invoke(_key);
     //    } 
     //}
+    //public Action<Color> KeyChanged { get; set; }
 
-    public Action<Color> KeyChanged { get; set; }
-
-    void Awake()
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
@@ -84,9 +80,9 @@ public class GameManager : MonoBehaviour
                 Gizmos.DrawSphere(position + Vector3.down / 2, 0.125f);
                 Gizmos.DrawCube(position + Vector3.up / 2, new Vector3(0.25f, 0.25f));
 
-                for (var k = 0; k < _layout[i][j].Keys.Count; k++)
+                for (var k = 0; k < _layout[i][j].KeysColors.Count; k++)
                 {
-                    var targetColor = _layout[i][j].Keys[k];
+                    var targetColor = _layout[i][j].KeysColors[k];
                     var targetChest = _chests.Single(chest => chest.Color == targetColor);
                     var columnIndex = _layout.FindIndex(row => row.Contains(targetChest));
                     var rowIndex = _layout[columnIndex].IndexOf(targetChest);
@@ -162,7 +158,7 @@ public class GameManager : MonoBehaviour
 
             for (var i = 0; i < chests.Length - 1; i++)
             {
-                chests[i].Keys.Add(chests[i + 1].Color);
+                chests[i].KeysColors.Add(chests[i + 1].Color);
             }
         }
 
@@ -187,7 +183,7 @@ public class GameManager : MonoBehaviour
 
                     var target = possibleTargets.GetRandom();
                     
-                    _layout[i][j].Keys.Add(target.Color);
+                    _layout[i][j].KeysColors.Add(target.Color);
                 }
             }
         }
@@ -199,20 +195,27 @@ public class GameManager : MonoBehaviour
                 for (var j = 0; j < _layout[i].Count; j++)
                 {
                     // 50% chance of double key
-                    if (_layout[i][j].Keys.Count != 0 && Random.value >= 0.5f)
+                    if (_layout[i][j].KeysColors.Count != 0 && Random.value >= 0.5f)
                     {
                         var possibleTargets = _layout.Skip(Math.Min(i + 2, _layout.Count - 1))
                             .SelectMany(row => row)
-                            .Where(chest => !_layout[i][j].Keys.Contains(chest.Color))
+                            .Where(chest => !_layout[i][j].KeysColors.Contains(chest.Color))
                             .ToList();
                         
                         if (possibleTargets.Count == 0)
                             continue;
                         
                         var target = possibleTargets.GetRandom();
-                        _layout[i][j].Keys.Add(target.Color);
+                        _layout[i][j].KeysColors.Add(target.Color);
                     }
                 }
+            }
+            foreach (var k in _layout[0])
+            {
+                _keys.Add(k.Color);
+                Image img = Instantiate(keyImage, _currentKeys.transform);
+                img.color = k.Color;
+                _currentKeysImages.Add(img);
             }
         }
     }

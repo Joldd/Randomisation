@@ -5,16 +5,14 @@ using UnityEngine.UI;
 
 public class Chest : MonoBehaviour
 {
-    [SerializeField] Animator _animator;
+    [SerializeField] public Animator _animator;
     [SerializeField] SpriteRenderer _spriteRenderer;
     [SerializeField] Sprite _closeSprite;
-    [SerializeField] GameObject key;
-    [SerializeField] GameObject locked;
-    [SerializeField] SpriteRenderer lockedSpriteRenderer;
+    [SerializeField] key _key;
+    [SerializeField] SpriteRenderer _sr;
     [SerializeField] GameObject treasure;
     Color _color;
-    bool test = false;
-    Color theGoodKey;
+    public bool test = false;
 
     [field: SerializeField] public int Id { get; private set; }
 
@@ -24,14 +22,29 @@ public class Chest : MonoBehaviour
         set
         {
             _color = value;
-            lockedSpriteRenderer.color = _color;
+            _sr.color = _color;
         }
     }
 
-    public List<Color> Keys { get; set; } = new List<Color>();
+    public List<Color> KeysColors { get; set; } = new List<Color>();
+    public List<key> Keys { get; set; } = new List<key>();
     public bool IsLast { get; set; }
     public bool IsOpened { get; private set; }
     public bool OnRequiredPath { get; set; }
+
+    private void Start()
+    {
+        float i = 0.2f;
+        foreach (var keyColor in KeysColors)
+        {
+            key keyObj = Instantiate(_key, transform);
+            keyObj.transform.position = new Vector3(transform.position.x + i, transform.position.y + 0.8f, transform.position.z);
+            keyObj.GetComponent<SpriteRenderer>().color = keyColor;
+            Keys.Add(keyObj);
+            keyObj.gameObject.SetActive(false);
+            i = -i;
+        }
+    }
 
     void OnMouseDown()
     {
@@ -43,10 +56,9 @@ public class Chest : MonoBehaviour
                 break;
             }
         }
-        if (!test)
+        if (!test || Keys.Count == 0)
             return;
         
-        IsOpened = true;
         _animator.Play("open");
         
         if (IsLast)
@@ -56,39 +68,12 @@ public class Chest : MonoBehaviour
         }
         else
         {
-            if (Keys.Count >= 2)
+           GameManager.Instance.changeColor(Color, new Color(0, 0, 0, 0));
+            foreach (var key in Keys)
             {
-                GameManager.Instance.changeColor(Color, new Color(0, 0, 0, 0));
-                List<Button> l_buttons = new List<Button>();
-                float i = 0.2f;
-                foreach (var keyClr in Keys)
-                {
-                    Button btn = Instantiate(GameManager.Instance.btnKey, GameManager.Instance._btnsKeys.transform);
-                    l_buttons.Add(btn);
-                    btn.GetComponent<Image>().color = keyClr;
-                    btn.onClick.AddListener(() => {
-                        GameManager.Instance.changeColor(new Color(0, 0, 0, 0), keyClr);
-                        foreach (var btn in l_buttons)
-                        {
-                            Destroy(btn.gameObject);
-                        }
-                    });
-                    GameObject keyObj = Instantiate(key, transform);
-                    keyObj.transform.position = new Vector3(transform.position.x + i, transform.position.y + 0.8f, transform.position.z);
-                    keyObj.GetComponent<SpriteRenderer>().color = keyClr;
-                    i = -i;
-                }
-            }
-            else
-            {
-                GameManager.Instance.changeColor(Color, Keys[0]);
-                GameObject myKey = Instantiate(key, transform);
-                myKey.transform.position = new Vector3(transform.position.x, transform.position.y + 0.8f, transform.position.z); ;
-                myKey.GetComponent<SpriteRenderer>().color = Keys[0];
+                key.gameObject.SetActive(true);
             }
         }
-        
-        locked.SetActive(false);
     }
 
     public void Clear()
@@ -104,6 +89,5 @@ public class Chest : MonoBehaviour
         Color = Color.clear;
         Keys.Clear();
         _spriteRenderer.sprite = _closeSprite;
-        locked.SetActive(true);
     }
 }
