@@ -13,7 +13,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] TMP_InputField _seedInput;
     [SerializeField] GameObject _stopButton;
     [SerializeField] GameObject _currentKeyGO;
-
+    
     public void Play()
     {
         _playButton.interactable = false;
