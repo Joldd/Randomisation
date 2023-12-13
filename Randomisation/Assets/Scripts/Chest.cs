@@ -62,6 +62,7 @@ public class Chest : MonoBehaviour
                 mySmoke.transform.position = new Vector3(transform.position.x - 0.23f, transform.position.y + 0.3f, transform.position.z);
                 _animator.Play("open");
                 IsOpened = true;
+                GameManager.Instance.changeColor(Color, new Color(0, 0, 0, 0));
             }   
         }
         else

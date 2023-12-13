@@ -262,6 +262,8 @@ public class GameManager : MonoBehaviour
     public void changeColor(Color key, Color newColor)
     {
         var i = _keys.IndexOf(key);
+        if (i == -1)
+            return;
         _keys[i] = newColor;
         foreach (var keyImage in _currentKeysImages)
         {
