@@ -16,20 +16,20 @@ public class GameUI : MonoBehaviour
     [SerializeField] GameObject _currentKeyGO;
     [SerializeField] Image _currentKey;
 
-    void OnEnable()
-    {
-        _gameManager.KeyChanged += OnKeyChanged;
-    }
+    //void OnEnable()
+    //{
+    //    _gameManager.KeyChanged += OnKeyChanged;
+    //}
 
-    void OnDisable()
-    {
-        _gameManager.KeyChanged -= OnKeyChanged;
-    }
+    //void OnDisable()
+    //{
+    //    _gameManager.KeyChanged -= OnKeyChanged;
+    //}
 
-    void OnKeyChanged(Color newColor)
-    {
-        _currentKey.color = newColor;
-    }
+    //void OnKeyChanged(Color newColor)
+    //{
+    //    _currentKey.color = newColor;
+    //}
     
     public void Play()
     {

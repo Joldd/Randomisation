@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -9,6 +10,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    [SerializeField] public HorizontalLayoutGroup _currentKeys;
+    [SerializeField] private Image keyImage;
+    public List<Image> _currentKeysImages  = new List<Image>();
+
     [SerializeField] public HorizontalLayoutGroup _btnsKeys;
     [SerializeField] public Button btnKey;
 
@@ -16,18 +21,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _container;
     List<Color> _colors;
 
-    Color _key;
+    public List<Color> _keys = new List<Color>();
     
-    public Color Key
-    {
-        get => _key;
-        set
-        {
-            _key = value;
-            KeyChanged?.Invoke(_key);
-        } 
-    }
-    
+    //Color _key;
+    //public Color Key
+    //{
+    //    get => _key;
+    //    set
+    //    {
+    //        _key = value;
+    //        KeyChanged?.Invoke(_key);
+    //    } 
+    //}
+
     public Action<Color> KeyChanged { get; set; }
 
     private void Awake()
@@ -108,7 +114,15 @@ public class GameManager : MonoBehaviour
         }
 
         _chests.Last().IsLast = true;
-        Key = _chests.First().Color;
+
+        // Ajout de 3 clés
+        for (int i = 0; i < 3; i++)
+        {
+            _keys.Add(_chests[Random.Range(0, _chests.Count - 1)].Color);
+            Image img = Instantiate(keyImage, _currentKeys.transform);
+            img.color = _keys[i];
+            _currentKeysImages.Add(img);
+        }
 
         return finalSeed;
     }
@@ -128,6 +142,21 @@ public class GameManager : MonoBehaviour
         foreach (var chest in _chests)
         {
             chest.Clear();
+        }
+    }
+
+    public void changeColor(Color key, Color newColor)
+    {
+        var i = _keys.IndexOf(key);
+        _keys[i] = newColor;
+        foreach (var keyImage in _currentKeysImages)
+        {
+            Color color = keyImage.color;
+            if (color == key)
+            {
+                keyImage.color = newColor;
+                break;
+            }   
         }
     }
 }

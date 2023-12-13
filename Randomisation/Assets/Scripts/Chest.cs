@@ -13,6 +13,8 @@ public class Chest : MonoBehaviour
     [SerializeField] SpriteRenderer lockedSpriteRenderer;
     [SerializeField] GameObject treasure;
     Color _color;
+    bool test = false;
+    Color theGoodKey;
 
     [field: SerializeField] public int Id { get; private set; }
 
@@ -32,7 +34,15 @@ public class Chest : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (GameManager.Instance.Key != Color)
+        foreach (var key in GameManager.Instance._keys)
+        {
+            if (key == Color)
+            {
+                test = true;
+                break;
+            }
+        }
+        if (!test)
             return;
         
         IsOpened = true;
@@ -47,7 +57,7 @@ public class Chest : MonoBehaviour
         {
             if (Keys.Count >= 2)
             {
-                GameManager.Instance.Key = new Color(0,0,0,0);
+                GameManager.Instance.changeColor(Color, new Color(0, 0, 0, 0));
                 List<Button> l_buttons = new List<Button>();
                 float i = 0.2f;
                 foreach (var keyClr in Keys)
@@ -56,7 +66,7 @@ public class Chest : MonoBehaviour
                     l_buttons.Add(btn);
                     btn.GetComponent<Image>().color = keyClr;
                     btn.onClick.AddListener(() => {
-                        GameManager.Instance.Key = keyClr;
+                        GameManager.Instance.changeColor(new Color(0, 0, 0, 0), keyClr);
                         foreach (var btn in l_buttons)
                         {
                             Destroy(btn.gameObject);
@@ -70,7 +80,7 @@ public class Chest : MonoBehaviour
             }
             else
             {
-                GameManager.Instance.Key = Keys[0];
+                GameManager.Instance.changeColor(Color, Keys[0]);
                 GameObject myKey = Instantiate(key, transform);
                 myKey.transform.position = new Vector3(transform.position.x, transform.position.y + 0.8f, transform.position.z); ;
                 myKey.GetComponent<SpriteRenderer>().color = Keys[0];
