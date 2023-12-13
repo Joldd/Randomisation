@@ -76,7 +76,9 @@ public class GameManager : MonoBehaviour
             for (var j = 0; j < _layout[i].Count; j++)
             {
                 var position = new Vector3(2 * j, -2 * i);
+                Gizmos.color = _layout[i][j].Color;
                 Gizmos.DrawCube(position, Vector3.one);
+                Gizmos.color = Color.white;
                 Gizmos.DrawSphere(position + Vector3.down / 2, 0.125f);
                 Gizmos.DrawCube(position + Vector3.up / 2, new Vector3(0.25f, 0.25f));
 
@@ -118,6 +120,7 @@ public class GameManager : MonoBehaviour
         DefineRequiredPath();
         AddRandomEdges();
         AddShortcutEdges();
+        AddInitialKeys();
         
         return seed;
 
@@ -136,13 +139,17 @@ public class GameManager : MonoBehaviour
 
         void CreateLayout()
         {
+            var shuffledChests = new List<Chest>(_chests).OrderBy(_ => Random.value).ToList();
+            
             _layout = new List<List<Chest>>
             {
-                new List<Chest> { _chests[0], _chests[1], _chests[2] },
-                new List<Chest> { _chests[3], _chests[4], _chests[5], _chests[6] },
-                new List<Chest> { _chests[7], _chests[8] },
-                new List<Chest> { _chests[9] },
+                new List<Chest> { shuffledChests[0], shuffledChests[1], shuffledChests[2] },
+                new List<Chest> { shuffledChests[3], shuffledChests[4], shuffledChests[5], shuffledChests[6] },
+                new List<Chest> { shuffledChests[7], shuffledChests[8] },
+                new List<Chest> { shuffledChests[9] },
             };
+
+            shuffledChests[9].IsLast = true;
         }
 
         void DefineRequiredPath()
@@ -210,6 +217,10 @@ public class GameManager : MonoBehaviour
                     }
                 }
             }
+        }
+
+        void AddInitialKeys()
+        {
             foreach (var k in _layout[0])
             {
                 _keys.Add(k.Color);

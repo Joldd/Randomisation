@@ -56,7 +56,7 @@ public class Chest : MonoBehaviour
                 break;
             }
         }
-        if (!test || Keys.Count == 0)
+        if (!test || Keys.Count == 0 && !IsLast)
             return;
         
         _animator.Play("open");
