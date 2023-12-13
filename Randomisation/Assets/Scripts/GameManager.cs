@@ -42,18 +42,6 @@ public class GameManager : MonoBehaviour
 
     List<List<Chest>> _layout;
 
-    //Color _key;
-    //public Color Key
-    //{
-    //    get => _key;
-    //    set
-    //    {
-    //        _key = value;
-    //        KeyChanged?.Invoke(_key);
-    //    } 
-    //}
-    //public Action<Color> KeyChanged { get; set; }
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -112,6 +100,7 @@ public class GameManager : MonoBehaviour
     public int Play(int seed)
     {
         ResetAllChests();
+        ResetKeys();
         
         seed = Init(seed);
 
@@ -121,13 +110,14 @@ public class GameManager : MonoBehaviour
         AddRandomEdges();
         AddShortcutEdges();
         AddInitialKeys();
+        SetupChests();
         
         return seed;
 
         void AssignColors()
         {
             var colors = new List<Color>(Colors);
-            
+
             foreach (var chest in _chests)
             {
                 int randomIndex = Random.Range(0, colors.Count - 1);
@@ -229,6 +219,14 @@ public class GameManager : MonoBehaviour
                 _currentKeysImages.Add(img);
             }
         }
+
+        void SetupChests()
+        {
+            foreach (var chest in _chests)
+            {
+                chest.Setup();
+            }
+        }
     }
 
     int Init(int seed = -1)
@@ -248,6 +246,16 @@ public class GameManager : MonoBehaviour
         foreach (var chest in _chests)
         {
             chest.Clear();
+        }
+    }
+
+    void ResetKeys()
+    {
+        _currentKeysImages.Clear();
+        
+        foreach (Transform key in _currentKeys.transform)
+        {
+            Destroy(key.gameObject);
         }
     }
 

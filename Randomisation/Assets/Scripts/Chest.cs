@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Chest : MonoBehaviour
 {
@@ -13,9 +11,7 @@ public class Chest : MonoBehaviour
     [SerializeField] GameObject treasure;
     Color _color;
     public bool test = false;
-
-    [field: SerializeField] public int Id { get; private set; }
-
+    
     public Color Color
     {
         get => _color;
@@ -32,20 +28,6 @@ public class Chest : MonoBehaviour
     public bool IsOpened { get; private set; }
     public bool OnRequiredPath { get; set; }
 
-    private void Start()
-    {
-        float i = 0.2f;
-        foreach (var keyColor in KeysColors)
-        {
-            key keyObj = Instantiate(_key, transform);
-            keyObj.transform.position = new Vector3(transform.position.x + i, transform.position.y + 0.8f, transform.position.z);
-            keyObj.GetComponent<SpriteRenderer>().color = keyColor;
-            Keys.Add(keyObj);
-            keyObj.gameObject.SetActive(false);
-            i = -i;
-        }
-    }
-
     void OnMouseDown()
     {
         foreach (var key in GameManager.Instance._keys)
@@ -56,6 +38,7 @@ public class Chest : MonoBehaviour
                 break;
             }
         }
+        
         if (!test || Keys.Count == 0 && !IsLast)
             return;
         
@@ -67,8 +50,8 @@ public class Chest : MonoBehaviour
             myTreasure.transform.position = new Vector3(transform.position.x - 0.23f, transform.position.y + 1.04f, transform.position.z); ;
         }
         else
-        {
-           GameManager.Instance.changeColor(Color, new Color(0, 0, 0, 0));
+        { 
+            GameManager.Instance.changeColor(Color, new Color(0, 0, 0, 0));
             foreach (var key in Keys)
             {
                 key.gameObject.SetActive(true);
@@ -76,9 +59,24 @@ public class Chest : MonoBehaviour
         }
     }
 
+    public void Setup()
+    {
+        float i = 0.2f;
+        
+        foreach (var keyColor in KeysColors)
+        {
+            key keyObj = Instantiate(_key, transform);
+            keyObj.transform.position = new Vector3(transform.position.x + i, transform.position.y + 0.8f, transform.position.z);
+            keyObj.GetComponent<SpriteRenderer>().color = keyColor;
+            Keys.Add(keyObj);
+            keyObj.gameObject.SetActive(false);
+            i = -i;
+        }
+    }
+
     public void Clear()
     {
-        for (int i = 2; i < transform.childCount; i++)
+        for (int i = 1; i < transform.childCount; i++)
         {
             Destroy(transform.GetChild(i).gameObject);
         }
@@ -87,6 +85,7 @@ public class Chest : MonoBehaviour
         IsOpened = false;
         OnRequiredPath = false;
         Color = Color.clear;
+        KeysColors.Clear();
         Keys.Clear();
         _spriteRenderer.sprite = _closeSprite;
     }
