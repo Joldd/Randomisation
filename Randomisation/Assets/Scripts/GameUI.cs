@@ -20,6 +20,8 @@ public class GameUI : MonoBehaviour
     [SerializeField] HorizontalLayoutGroup solutionGroup;
     [SerializeField] Image chestImg;
     [SerializeField] Image arrowImg;
+    [SerializeField] GameObject seedCopied;
+
 
     public void Play()
     {
@@ -52,10 +54,12 @@ public class GameUI : MonoBehaviour
         _mainMenuGroup.DOFade(1f, 0.1f);
 
         closeSolutions();
+
     }
 
     public void CopySeed()
     {
+        seedCopied.GetComponent<Animator>().Play("copied");
         GUIUtility.systemCopyBuffer = _seedText.text[7..];
     }
 
