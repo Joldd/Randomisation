@@ -20,6 +20,7 @@ public class GameUI : MonoBehaviour
     [SerializeField] VerticalLayoutGroup solutionsGroup;
     [SerializeField] HorizontalLayoutGroup solutionGroup;
     [SerializeField] Image chestImg;
+    [SerializeField] Image arrowImg;
 
     public void Play()
     {
@@ -67,6 +68,10 @@ public class GameUI : MonoBehaviour
             {
                 Image cImg = Instantiate(chestImg, sGroup.transform);
                 cImg.color = color;
+                if (solution.IndexOf(color) != (solution.Count - 1))
+                {
+                    Image aImg = Instantiate(arrowImg, sGroup.transform);
+                }
             }
         }
     }

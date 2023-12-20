@@ -2959,6 +2959,7 @@ MonoBehaviour:
   solutionsGroup: {fileID: 767148774}
   solutionGroup: {fileID: 1418751637662424409, guid: 89b50de0ce9b703418c3ef5dfb20f5b8, type: 3}
   chestImg: {fileID: 2121771736235507913, guid: 29efb0164a73e274b962e09f5f2f7ac0, type: 3}
+  arrowImg: {fileID: 2121771736235507913, guid: 6655b13a61f543e488d45246142c981d, type: 3}
 --- !u!1001 &1560761758
 PrefabInstance:
   m_ObjectHideFlags: 0
