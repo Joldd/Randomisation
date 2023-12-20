@@ -92,11 +92,12 @@ public class GameManager : MonoBehaviour
                         var heightOffset = Vector3.up * halfHeight;
                         var widthOffset = Mathf.Approximately(position.x, dest.x) ? Vector3.right : Vector3.zero;
 
-                        Handles.DrawBezier(position, dest, position - heightOffset - widthOffset, dest + heightOffset - widthOffset, Color.red, EditorGUIUtility.whiteTexture, 1f);   
+                        Handles.DrawBezier(position + Vector3.down / 2, dest, position - heightOffset - widthOffset,
+                            dest + heightOffset - widthOffset, Color.red, EditorGUIUtility.whiteTexture, 1f);   
                     }
                     else
                     {
-                        Gizmos.DrawLine(position + new Vector3(0.1f * k, -0.5f), new Vector3(2 * rowIndex, -2 * columnIndex) + Vector3.up / 2);
+                        Gizmos.DrawLine(position + Vector3.down / 2, new Vector3(2 * rowIndex, -2 * columnIndex) + Vector3.up / 2);
                     }
 
                     Gizmos.color = Color.white;
@@ -149,13 +150,34 @@ public class GameManager : MonoBehaviour
         void CreateLayout()
         {
             var shuffledChests = new List<Chest>(_chests).OrderBy(_ => Random.value).ToList();
-            
-            _layout = new List<List<Chest>>
+
+            var layoutIndex = Random.Range(0, 3);
+
+            _layout = layoutIndex switch
             {
-                new List<Chest> { shuffledChests[0], shuffledChests[1], shuffledChests[2] },
-                new List<Chest> { shuffledChests[3], shuffledChests[4], shuffledChests[5], shuffledChests[6] },
-                new List<Chest> { shuffledChests[7], shuffledChests[8] },
-                new List<Chest> { shuffledChests[9] },
+                0 => new List<List<Chest>>
+                {
+                    new List<Chest> { shuffledChests[0], shuffledChests[1], shuffledChests[2] },
+                    new List<Chest> { shuffledChests[3], shuffledChests[4], shuffledChests[5], shuffledChests[6] },
+                    new List<Chest> { shuffledChests[7], shuffledChests[8] },
+                    new List<Chest> { shuffledChests[9] },
+                },
+                1 => new List<List<Chest>>
+                {
+                    new List<Chest> { shuffledChests[0], shuffledChests[1], shuffledChests[2] },
+                    new List<Chest> { shuffledChests[3], shuffledChests[4], shuffledChests[5] },
+                    new List<Chest> { shuffledChests[6], shuffledChests[7], shuffledChests[8] },
+                    new List<Chest> { shuffledChests[9] },
+                },
+                2 => new List<List<Chest>>
+                {
+                    new List<Chest> { shuffledChests[0], shuffledChests[1], shuffledChests[2] },
+                    new List<Chest> { shuffledChests[3], shuffledChests[4] },
+                    new List<Chest> { shuffledChests[5], shuffledChests[6] },
+                    new List<Chest> { shuffledChests[7], shuffledChests[8] },
+                    new List<Chest> { shuffledChests[9] },
+                },
+                _ => throw new ArgumentOutOfRangeException(),
             };
 
             shuffledChests[9].IsLast = true;
