@@ -282,24 +282,13 @@ public class GameManager : MonoBehaviour
     
     public List<List<Color>> GetPaths()
     {
-        var sw = new Stopwatch();
-
         var paths = new List<List<Color>>();
-        var queue = new List<List<Color>>();
-
-        foreach (var chest in _layout[0])
-        {
-            queue.Add(new List<Color> { chest.Color });
-        }
-            
+        var queue = new Queue<List<Color>>(_layout[0].Select(chest => new List<Color> { chest.Color }));
         var lastChest = _layout.Last()[0].Color;
-
-        sw.Start();
-
+        
         while (queue.Count > 0)
         {
-            var path = new List<Color>(queue[0]);
-            queue.RemoveAt(0);
+            var path = queue.Dequeue();
 
             var node = path[^1];
 
@@ -313,26 +302,10 @@ public class GameManager : MonoBehaviour
 
             foreach (var neighbor in neighbors)
             {
-                queue.Add(new List<Color>(path) { neighbor });
-            }
-
-            if (sw.Elapsed.TotalSeconds > 10f)
-            {
-                Debug.Log($"Timed out ({10f} sec)...");
-                break;
+                queue.Enqueue(new List<Color>(path) { neighbor });
             }
         }
-
-        if (paths.Count == 0)
-        {
-            Debug.Log("No path found.");
-            return paths;
-        }
-
-        Debug.Log($"Minimum length : {paths[0].Count}, " + $"Count : {paths.Count}, " + $"Time : {sw.Elapsed.TotalSeconds}, " +
-                  $"Example solution : {paths[0].ToDisplayString()}");
-            
-        sw.Reset();
+        
         return paths;
     }
 
@@ -348,6 +321,7 @@ public class GameManager : MonoBehaviour
 
     void ResetKeys()
     {
+        _keys.Clear();
         _currentKeysImages.Clear();
         
         foreach (Transform key in _currentKeys.transform)
