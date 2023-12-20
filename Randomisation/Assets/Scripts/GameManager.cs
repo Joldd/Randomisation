@@ -232,19 +232,24 @@ public class GameManager : MonoBehaviour
             {
                 for (var j = 0; j < _layout[i].Count; j++)
                 {
+                    var currentChest = _layout[i][j];
+                    
                     // 50% chance of double key
-                    if (_layout[i][j].KeysColors.Count != 0 && Random.value >= 0.5f)
+                    if (currentChest.KeysColors.Count != 0 && Random.value >= 0.5f)
                     {
                         var possibleTargets = _layout.Skip(Math.Min(i + 2, _layout.Count - 1))
                             .SelectMany(row => row)
-                            .Where(chest => !_layout[i][j].KeysColors.Contains(chest.Color))
+                            .Where(chest => !currentChest.KeysColors.Contains(chest.Color))
                             .ToList();
-                        
+
+                        if (currentChest.OnRequiredPath)
+                            possibleTargets = possibleTargets.Where(chest => chest.OnRequiredPath).ToList();
+
                         if (possibleTargets.Count == 0)
                             continue;
                         
                         var target = possibleTargets.GetRandom();
-                        _layout[i][j].KeysColors.Add(target.Color);
+                        currentChest.KeysColors.Add(target.Color);
                     }
                 }
             }
