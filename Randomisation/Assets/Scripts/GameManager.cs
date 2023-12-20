@@ -252,7 +252,7 @@ public class GameManager : MonoBehaviour
     {
         // Generates a random seed if not given
         if (seed == -1)
-            seed = Environment.TickCount;
+            seed = Math.Abs(Environment.TickCount);
         
         Random.InitState(seed);
         return seed;
