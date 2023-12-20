@@ -24,9 +24,6 @@ public class key : MonoBehaviour
         {
             k.gameObject.SetActive(false);
         }
-        if (chest.Keys.Count != 0)
-        {
-            chest._animator.Play("close");
-        }
+        chest._animator.Play("close");
     }
 }

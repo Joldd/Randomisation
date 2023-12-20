@@ -31,6 +31,12 @@ public class Chest : MonoBehaviour
 
     void OnMouseDown()
     {
+        test = false;
+        if (IsOpened && Keys.Count == 0 && !IsLast)
+        {
+            _animator.Play("close");
+            IsOpened = false;
+        }
         foreach (var key in GameManager.Instance._keys)
         {
             if (key == Color)
@@ -41,29 +47,23 @@ public class Chest : MonoBehaviour
         }
         if (!test)
             return;
-
+        
         if (IsLast)
         {
             GameObject myTreasure = Instantiate(treasure, transform);
             myTreasure.transform.position = new Vector3(transform.position.x - 0.23f, transform.position.y + 1.04f, transform.position.z);
             _animator.Play("open");
             IsOpened = true;
+            GameManager.Instance.changeColor(Color, new Color(0, 0, 0, 0));
         }
-        else if (Keys.Count == 0)
+        else if (Keys.Count == 0 && !IsOpened)
         {
-            if (IsOpened)
-            {
-                _animator.Play("close");
-                IsOpened = false;
-            }
-            else
-            {
-                GameObject mySmoke = Instantiate(smoke, transform);
-                mySmoke.transform.position = new Vector3(transform.position.x - 0.23f, transform.position.y + 0.3f, transform.position.z);
-                _animator.Play("open");
-                IsOpened = true;
-                GameManager.Instance.changeColor(Color, new Color(0, 0, 0, 0));
-            }   
+            GameObject mySmoke = Instantiate(smoke, transform);
+            mySmoke.transform.position = new Vector3(transform.position.x - 0.23f, transform.position.y + 0.3f, transform.position.z);
+            _animator.Play("open");
+            IsOpened = true;
+            GameManager.Instance.changeColor(Color, new Color(0, 0, 0, 0));
+               
         }
         else
         {
