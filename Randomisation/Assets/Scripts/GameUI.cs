@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
 using System.Collections.Generic;
-using static log4net.Appender.ColoredConsoleAppender;
 
 public class GameUI : MonoBehaviour
 {
@@ -49,7 +48,10 @@ public class GameUI : MonoBehaviour
         _seedButton.SetActive(false);
         _stopButton.SetActive(false);
         _currentKeyGO.SetActive(false);
+        _solutionButton.SetActive(false);
         _mainMenuGroup.DOFade(1f, 0.1f);
+
+        closeSolutions();
     }
 
     public void CopySeed()
