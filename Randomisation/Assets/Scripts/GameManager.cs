@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Utils.ExtensionMethods;
+using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
+using Vector3 = UnityEngine.Vector3;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class GameManager : MonoBehaviour
 {
@@ -54,6 +61,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     void OnDrawGizmosSelected()
     {
         if (_layout == null)
@@ -78,14 +86,25 @@ public class GameManager : MonoBehaviour
                     var rowIndex = _layout[columnIndex].IndexOf(targetChest);
 
                     if (k >= 1)
-                        Gizmos.color = Color.red;
+                    {
+                        var dest = new Vector3(2 * rowIndex, -2 * columnIndex) + Vector3.up / 2;
+                        var halfHeight = (position.y - dest.y) * 0.5f;
+                        var heightOffset = Vector3.up * halfHeight;
+                        var widthOffset = Mathf.Approximately(position.x, dest.x) ? Vector3.right : Vector3.zero;
 
-                    Gizmos.DrawLine(position + new Vector3(0.1f * k, -0.5f), new Vector3(2 * rowIndex, -2 * columnIndex) + Vector3.up / 2);
+                        Handles.DrawBezier(position, dest, position - heightOffset - widthOffset, dest + heightOffset - widthOffset, Color.red, EditorGUIUtility.whiteTexture, 1f);   
+                    }
+                    else
+                    {
+                        Gizmos.DrawLine(position + new Vector3(0.1f * k, -0.5f), new Vector3(2 * rowIndex, -2 * columnIndex) + Vector3.up / 2);
+                    }
+
                     Gizmos.color = Color.white;
                 }
             }
         }
     }
+#endif
 
     public void ShowChests()
     {
@@ -237,6 +256,62 @@ public class GameManager : MonoBehaviour
         
         Random.InitState(seed);
         return seed;
+    }
+    
+    public List<List<Color>> GetPaths()
+    {
+        var sw = new Stopwatch();
+
+        var paths = new List<List<Color>>();
+        var queue = new List<List<Color>>();
+
+        foreach (var chest in _layout[0])
+        {
+            queue.Add(new List<Color> { chest.Color });
+        }
+            
+        var lastChest = _layout.Last()[0].Color;
+
+        sw.Start();
+
+        while (queue.Count > 0)
+        {
+            var path = new List<Color>(queue[0]);
+            queue.RemoveAt(0);
+
+            var node = path[^1];
+
+            if (node == lastChest)
+            {
+                paths.Add(path);
+                continue;
+            }
+
+            var neighbors = _chests.First(chest => chest.Color == node).KeysColors;
+
+            foreach (var neighbor in neighbors)
+            {
+                queue.Add(new List<Color>(path) { neighbor });
+            }
+
+            if (sw.Elapsed.TotalSeconds > 10f)
+            {
+                Debug.Log($"Timed out ({10f} sec)...");
+                break;
+            }
+        }
+
+        if (paths.Count == 0)
+        {
+            Debug.Log("No path found.");
+            return paths;
+        }
+
+        Debug.Log($"Minimum length : {paths[0].Count}, " + $"Count : {paths.Count}, " + $"Time : {sw.Elapsed.TotalSeconds}, " +
+                  $"Example solution : {paths[0].ToDisplayString()}");
+            
+        sw.Reset();
+        return paths;
     }
 
     void ResetAllChests()
